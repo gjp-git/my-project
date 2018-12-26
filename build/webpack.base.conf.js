@@ -53,7 +53,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        include: [resolve('src'), resolve('node_modules/element-ui/lib/')],
+        include: [resolve('src')],
         loader: 'style-loader!css-loader'
       },
       {
