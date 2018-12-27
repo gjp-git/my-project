@@ -17135,7 +17135,7 @@
         //console.log(criteria)
         let that = this
         axios.post(
-          'http://127.0.0.1:8080/cicv/scene/getScenceByCity',
+          'http://192.168.3.94:8080/cicv/scenarioLibrary/scenarios',
           criteria,
           {
             headers: {
