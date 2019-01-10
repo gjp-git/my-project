@@ -60,6 +60,11 @@
               min: -30,
               axisLine: {
                 show: false
+              },
+              axisLabel: {
+                textStyle: {
+                  fontSize: '10'
+                }
               }
             },
             yAxis: {
@@ -67,10 +72,15 @@
               min: 0,
               axisLine: {
                 show: false
+              },
+              axisLabel: {
+                textStyle: {
+                  fontSize: '10'
+                }
               }
             },
             series: [{
-              symbolSize: 20,
+              symbolSize: 15,
               data: chartData,
               type: 'scatter'
             }]
@@ -98,30 +108,30 @@
   .chartbox {
     border: 4px solid rgb(0, 58, 103);
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   .car-img {
-    width: 80px;
-    height: 80px;
+    width: 50px;
+    height: 50px;
     position: absolute;
-    bottom: 60px;
+    bottom: 40px;
     transform: translate(-50%,0);
   }
   .unit {
     position: absolute;
-    bottom: 66px;
+    bottom: 36px;
     right: 10px;
   }
   .box-label {
-    font-size: 32px;
+    font-size: 20px;
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     display: block;
     color: white;
   }
 
   .small {
-    font-size: 10px;
+    font-size: 8px;
   }
 
 </style>

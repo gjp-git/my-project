@@ -3,7 +3,7 @@
     <!-- 加载进度 -->
     <div class="label title">国汽智联场景库数据平台</div>
     <div class="label small version">V1.0</div>
-    <search-panel @search="search">查询</search-panel>
+    <search-panel @search="search" :city-place-holder="result[index].city" :time-place-holder="timePlaceHolder">查询</search-panel>
     <div v-show="!isLoaded&&hasData" class="page-container">
       <div class="loading-panel">
         <h1><strong>Loading...</strong></h1>
@@ -16,79 +16,82 @@
       </div>
     </div>
     <div v-show="isLoaded&&hasData">
-      <div>
-        <!-- 图片播放器 -->
-        <div class="video-box">
-          <div class="video-pic-div ">
-            <div class="video-pic-imgPanel">
-              <div :key="key+'pic'" class="video-pic-imgDiv" v-for='(value, key) in result'>
-                <img :key="key+'picimg'" class="video-pic-img loadimg" v-show="key===index" :src='ipPrefix + value.webp'/>
+      <div style="width: 55%;display: inline-block;vertical-align: top;padding: 10px;">
+        <div>
+          <!-- 图片播放器 -->
+          <div class="video-box">
+            <div class="video-pic-div ">
+              <div class="video-pic-imgPanel">
+                <div :key="key+'pic'" class="video-pic-imgDiv" v-for='(value, key) in result'>
+                  <img :key="key+'picimg'" class="video-pic-img loadimg" v-show="key===index" :src='ipPrefix + value.webp'/>
+                </div>
+              </div>
+              <div class="video-control">
+                <!-- 播放控制 -->
+                <!-- 播放按钮 -->
+                <img class="video-control-img" v-on:click="play" v-show="!isPlaying" src='static/play.png'/>
+                <img class="video-control-img" v-on:click="pause" v-show="isPlaying" src='static/pause.png'/>
+                <img class="video-control-img" v-on:click="stop" src='static/stop.png'/>
+                <!-- 播放时间 -->
+                <div class="video-control-num">{{formatNum(currentMiao/10,1)}}</div>
+                <!-- 进度条 -->
+                <div class="video-control-progress">
+                  <progress-bar :percent="percent"  :height="'8px'"
+                                @pbar-drag="drag" @pbar-seek="seek"></progress-bar>
+                </div>
+                <!-- 总时长 -->
+                <div class="video-control-num">{{formatNum(miao/10,1)}}</div>
               </div>
             </div>
-            <div class="video-control">
-              <!-- 播放控制 -->
-              <!-- 播放按钮 -->
-              <img class="video-control-img" v-on:click="play" v-show="!isPlaying" src='static/play.png'/>
-              <img class="video-control-img" v-on:click="pause" v-show="isPlaying" src='static/pause.png'/>
-              <img class="video-control-img" v-on:click="stop" src='static/stop.png'/>
-              <!-- 播放时间 -->
-              <div class="video-control-num">{{formatNum(currentMiao/10,1)}}</div>
-              <!-- 进度条 -->
-              <div class="video-control-progress">
-                <progress-bar :percent="percent"
-                              @pbar-drag="drag" @pbar-seek="seek"></progress-bar>
-              </div>
-              <!-- 总时长 -->
-              <div class="video-control-num">{{formatNum(miao/10,1)}}</div>
-            </div>
+            <div class="label">单目摄像头</div>
           </div>
-          <div class="label">单目摄像头</div>
+
+          <div class="video-box">
+            <div class="video-pic-div ">
+              <div class='video-pic-imgPanel'>
+                <div :key="key+'mak'" class="video-pic-imgDiv" v-for='(value, key) in result'>
+                  <!-- 标注 -->
+                  <img :key="key+'makimg'" class="video-pic-img loadimg" v-show="key===index" :src='ipPrefix + value.image_marked'/>
+                </div>
+              </div>
+              <div class="v-center">
+                <div class="label small">Remaked by Yolo</div>
+              </div>
+
+            </div>
+            <div class="label">标注</div>
+          </div>
         </div>
 
-        <div class="video-box">
-          <div class="video-pic-div ">
-            <div class='video-pic-imgPanel'>
-              <div :key="key+'mak'" class="video-pic-imgDiv" v-for='(value, key) in result'>
-                <!-- 标注 -->
-                <img :key="key+'makimg'" class="video-pic-img loadimg" v-show="key===index" :src='ipPrefix + value.webp_marked'/>
+        <div>
+          <div class="video-box">
+            <div class="video-pic-div ">
+              <div class='video-pic-imgPanel'>
+                <div :key="key+'pnt'" class="video-pic-imgDiv" v-for='(value, key) in result'>
+                  <!-- 点云图 -->
+                  <img :key="key+'pntimg'" class="clip-img loadimg" v-show="key===index" :src='ipPrefix + value.pcl1_image'/>
+                </div>
               </div>
             </div>
-            <div class="v-center">
-              <div class="label small">Remaked by Yolo</div>
-            </div>
-
+            <div class="label">点云</div>
           </div>
-          <div class="label">标注</div>
+
+          <div class="video-box">
+            <dom-chart-box :objs="result[index]?result[index].obj:[]" :chart-style="chartStyle">Mobileye</dom-chart-box>
+          </div>
         </div>
       </div>
+      <div style="width: 35%;display: inline-block;vertical-align: top;padding: 10px;">
+        <!--<div class="basicInfo">
+          <h1 style='color: white'>{{result[index].time}}</h1>
+          <h1 style='color: white'>{{result[index].city}}</h1>
+        </div>-->
 
-      <div>
-        <div class="video-box">
-          <div class="video-pic-div ">
-            <div class='video-pic-imgPanel'>
-              <div :key="key+'pnt'" class="video-pic-imgDiv" v-for='(value, key) in result'>
-                <!-- 点云图 -->
-                <img :key="key+'pntimg'" class="clip-img loadimg" v-show="key===index" :src='ipPrefix + value.pcl1_image'/>
-              </div>
-            </div>
-          </div>
-          <div class="label">点云</div>
-        </div>
+        <can-panel class='can-panel' :data-item="result[index]"></can-panel>
 
-        <div class="video-box">
-          <dom-chart-box :objs="result[index]?result[index].obj:[]" :chart-style="chartStyle">Mobileye</dom-chart-box>
-        </div>
+        <map-panel class='map-panel' :points="gpsPoints" :index="index"></map-panel>
+        <div class="label">地图</div>
       </div>
-
-      <div class="basicInfo">
-        <h1 style='color: white'>{{result[index].time}}</h1>
-        <h1 style='color: white'>{{result[index].city}}</h1>
-      </div>
-
-      <can-panel class='can-panel' :data-item="result[index]"></can-panel>
-
-      <map-panel class='map-panel' :points="gpsPoints" :index="index"></map-panel>
-
       <div style="height:50px"/>
     </div>
   </div>
@@ -17099,8 +17102,8 @@
         imgPrecent: 0,
         gpsPoints: [],
         chartStyle: {
-          width: '500px',
-          height: '405px'
+          width: '350px',
+          height: '280px'
         }
       }
     },
@@ -17112,6 +17115,9 @@
       'search-panel': SearchPanel
     },
     computed: {
+      timePlaceHolder(){
+        return (this.result[this.index].timestamp)*100
+      }
       /*timeOut: {
         set (val) {
           this.$store.state.timeout.compileTimeout = val
@@ -17135,7 +17141,7 @@
         //console.log(criteria)
         let that = this
         axios.post(
-          'http://192.168.3.94:8080/cicv/scenarioLibrary/scenarios',
+          'http://192.168.3.94:8080/cicv/scene/getScenceByCity',
           criteria,
           {
             headers: {
@@ -17301,7 +17307,7 @@
     position: relative;
     display: inline-block;
     top: 20px;
-    margin: 10px 50px 20px;
+    margin: 10px 20px 10px;
   }
 
   .video-pic-div {
@@ -17311,16 +17317,16 @@
     margin: 10px 50px 50px;*/
     margin-bottom: 10px;
     padding: 0;
-    width: 500px;
-    height: 405px;
+    width: 350px;
+    height: 280px;
     border: 4px solid rgb(0, 58, 103);
     overflow: hidden;
   }
 
   .video-pic-imgPanel {
     position: relative;
-    width: 500px;
-    height: 375px;
+    width: 350px;
+    height: 262.5px;
     padding: 0;
     margin: 0;
     /*background: black;*/
@@ -17328,7 +17334,7 @@
 
   .video-pic-imgDiv {
     position: relative;
-    width: 500px;
+    width: 350px;
     top: 50%;
     -webkit-transform: translate(0, -50%);
     -moz-transform: translate(0, -50%);
@@ -17337,7 +17343,7 @@
 
   .video-pic-img {
     top: 2px;
-    width: 500px;
+    width: 350px;
     position: relative;
 
   }
@@ -17347,23 +17353,23 @@
     transform: rotate(-90deg);
     top: 2px;
     left: -50%;
-    height: 500px;
+    height: 350px;
     position: relative;
   }
 
   .video-control {
     position: relative;
-    width: 500px;
-    height: 30px;
-    line-height: 30px;
+    width: 350px;
+    height: 18px;
+    line-height: 18px;
     text-align: center;
   }
 
   .video-control-num {
     position: relative;
     color: rgb(62, 140, 201);
-    font-size: 10px;
-    width: 20px;
+    font-size: 6px;
+    width: 15px;
     display: inline-block;
     font-family: 黑体;
     vertical-align: middle;
@@ -17371,8 +17377,8 @@
 
   .video-control-img {
     position: relative;
-    width: 20px;
-    height: 20px;
+    width: 12px;
+    height: 12px;
     display: inline-block;
     vertical-align: middle;
   }
@@ -17392,40 +17398,43 @@
 
   .v-center {
     position: relative;
-    margin: 8px;
+    margin: 5px;
   }
 
   .label {
-    font-size: 32px;
+    font-size: 20px;
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     display: block;
     color: white;
   }
   .small {
-    font-size: 16px;
+    font-size: 10px;
   }
   .title{
-    padding-top: 50px;
-    font-size: 50px;
+    padding-top: 20px;
+    font-size: 24px;
   }
   .version{
     position: absolute;
-    right: 2%;
-    top: 1%;
-    font-size: 20px;
+    right: 1.5%;
+    top: 1.2%;
+    font-size: 15px;
   }
 
   .can-panel {
     position: relative;
+    top: 25px;
     margin-bottom: 50px;
   }
 
   .map-panel {
     position: relative;
-    width: 1100px;
-    height: 500px;
+    width: 600px;
+    height: 490px;
     left: 50%;
     transform: translate(-50%, 0);
+    border: 4px solid rgb(0, 58, 103);
+    margin-bottom: 10px;
   }
 
 

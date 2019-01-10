@@ -1,7 +1,7 @@
 <template>
   <div class="search-panel">
     <el-row>
-      <span class="label">城市</span>
+      <span class="label">地区</span>
       <el-select v-model="city" placeholder="请选择城市" @change="hasCity = true">
         <el-option
           v-for="option in options"
@@ -22,7 +22,8 @@
       >
       </el-date-picker>
 
-      <el-button type="primary" class="search-button" @click="search" :disabled="checked"><slot></slot></el-button>
+      <!--<el-button type="primary" class="search-button" @click="search" :disabled="checked"><slot></slot></el-button>-->
+      <el-button type="primary" class="search-button" @click="search" ><slot></slot></el-button>
     </el-row>
   </div>
 </template>
@@ -34,6 +35,10 @@
 
   export default {
     name: 'SearchPanel',
+    props: {
+      cityPlaceHolder: String,
+      timePlaceHolder: Number
+    },
     data () {
       return {
         //TODO: 改为接口获取
@@ -43,11 +48,21 @@
         }, {
           value: 'haidian',
           label: '海淀'
+        }, {
+          value: 'shunyi',
+          label: '顺义'
+        }, {
+          value: 'yizhuang',
+          label: '亦庄'
+        }, {
+          value: '4huan',
+          label: '四环'
         }],
-        city: null,
-        datetime: null,
+        city: this.cityPlaceHolder,
+        datetime: this.timePlaceHolder,
         hasCity: false,
         hasTime: false,
+
       }
     },
     computed:{
@@ -87,22 +102,18 @@
 
 <style scoped>
   .label {
-    padding-right: 20px;
-    padding-left: 30px;
+    padding-right: 10px;
+    padding-left: 10px;
     display: inline-block;
     vertical-align: middle;
   }
 
-  .inline-block {
-    position: relative;
-    display: inline-block;
-    padding: 20px;
-  }
+
 
   .search-panel {
-    padding: 100px;
+    padding: 20px;
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    font-size: 25px;
+    font-size: 18px;
     color: white;
   }
 

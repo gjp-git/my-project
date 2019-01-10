@@ -13,7 +13,7 @@
       <div class="can-data-imgPanel">
         <img class="can-data-img" src='static/brake.png'/>
         <div class="can-slider">
-          <el-slider :value="dataItem|getBrakePressure" vertical height="120px" :disabled="true"
+          <el-slider :value="dataItem|getBrakePressure" vertical height="65px" :disabled="true"
                      :show-tooltip="false">
           </el-slider>
         </div>
@@ -25,7 +25,7 @@
       <div class="can-data-imgPanel">
         <img class="can-data-img" src='static/acceleration.png'/>
         <div class="can-slider">
-          <el-slider :value="dataItem|getAccelerationPedal" vertical height="120px" :disabled="true"
+          <el-slider :value="dataItem|getAccelerationPedal" vertical height="65px" :disabled="true"
                      :show-tooltip="false">
           </el-slider>
         </div>
@@ -37,7 +37,7 @@
       <div class="can-data-imgPanel">
         <img class="can-data-img" src='static/speed.png'/>
         <div class="can-slider">
-          <el-slider :value="dataItem|getSpeed" vertical height="120px" :disabled="true" :show-tooltip="false">
+          <el-slider :value="dataItem|getSpeed" vertical height="65px" :disabled="true" :show-tooltip="false">
           </el-slider>
         </div>
       </div>
@@ -113,19 +113,17 @@
 <style scoped>
   .can-data-panel {
     position: relative;
-    top: 20px;
     color: white;
-    heigth: 200px;
-    margin-bottom: 50px;
+    heigth: 100px;
   }
 
   .can-data-block {
     position: relative;
     display: inline-block;
-    width: 200px;
-    heigth: 200px;
-    margin-left: 50px;
-    margin-right: 50px;
+    width: 100px;
+    heigth: 100px;
+    margin-left: 10px;
+    margin-right: 10px;
     vertical-align: top;
   }
 
@@ -136,8 +134,8 @@
 
   .can-data-img {
     position: relative;
-    width: 150px;
-    height: 150px;
+    width: 75px;
+    height: 75px;
     margin: 0;
     display: inline-block;
     vertical-align: top;
@@ -146,14 +144,14 @@
   .can-slider {
     position: relative;
     display: inline-block;
-    width: 40px;
-    height: 150px;
-    top: 15px;
+    width: 20px;
+    height: 75px;
+    top: 5px;
     vertical-align: top;
   }
 
   .can-data {
-    font-size: 32px;
+    font-size: 16px;
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     display: block;
     color: white;
@@ -161,7 +159,7 @@
 
   .percentData {
     position: relative;
-    left: 25px;
+    left: 10px;
   }
 </style>
 
@@ -182,8 +180,8 @@
   .el-slider__runway.disabled .el-slider__button {
     border-color: rgb(0, 36, 65);
     border-radius: 0;
-    width: 16px;
-    height: 8px;
+    width: 10px;
+    height: 6px;
     background-color: rgb(0, 36, 65);
   }
 
