@@ -105,6 +105,7 @@
   import CanDataPanel from './CanDataPanel.vue'
   import MapPanel from './MapPanel.vue'
   import SearchPanel from './SearchPanel.vue'
+  import SearchPanel1 from './SearchPanel1.vue'
   import axios from 'axios'
 
   let echarts = require('echarts/lib/echarts')
@@ -17112,7 +17113,7 @@
       'dom-chart-box': DomChartBox,
       'can-panel': CanDataPanel,
       'map-panel': MapPanel,
-      'search-panel': SearchPanel
+      'search-panel': SearchPanel1
     },
     computed: {
       timePlaceHolder(){
