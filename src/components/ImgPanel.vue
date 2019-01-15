@@ -51,7 +51,7 @@
               <div class='video-pic-imgPanel'>
                 <div :key="key+'mak'" class="video-pic-imgDiv" v-for='(value, key) in result'>
                   <!-- 标注 -->
-                  <img :key="key+'makimg'" class="video-pic-img loadimg" v-show="key===index" :src='ipPrefix + value.image_marked'/>
+                  <img :key="key+'makimg'" class="video-pic-img loadimg" v-show="key===index" :src='ipPrefix + value.webp_marked'/>
                 </div>
               </div>
               <div class="v-center">
