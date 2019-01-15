@@ -5,7 +5,8 @@
       <div>
         <img :style="getSteerStyle" class="can-data-imgPanel can-data-img" src='static/steer.png'/>
       </div>
-      <div class="can-data">{{formatNum(dataItem.can.siSteeringAngle,2)}}&deg;</div>
+      <div v-if="!isNaN(steerStyle)" class="can-data">{{steerStyle}}&deg;</div>
+      <div v-else class="can-data">无数据</div>
       <!--{{result[index].can.siSteeringAngle}}-->
       <div class="can-data">方向盘</div>
     </div>
@@ -13,35 +14,38 @@
       <div class="can-data-imgPanel">
         <img class="can-data-img" src='static/brake.png'/>
         <div class="can-slider">
-          <el-slider :value="dataItem|getBrakePressure" vertical height="65px" :disabled="true"
+          <el-slider :value="brakePressure" vertical height="65px" :disabled="true"
                      :show-tooltip="false">
           </el-slider>
         </div>
       </div>
-      <div class="percentData can-data">{{formatNum(dataItem.can.siBrakePressure/180,2)}}%</div>
+      <div v-if="!isNaN(brakePressure)" class="percentData can-data">{{brakePressure}}%</div>
+      <div v-else class="percentData can-data">{{brakePressure}}%</div>
       <div class="percentData can-data">刹车</div>
     </div>
     <div class="can-data-block">
       <div class="can-data-imgPanel">
         <img class="can-data-img" src='static/acceleration.png'/>
         <div class="can-slider">
-          <el-slider :value="dataItem|getAccelerationPedal" vertical height="65px" :disabled="true"
+          <el-slider :value="accelerationPedal" vertical height="65px" :disabled="true"
                      :show-tooltip="false">
           </el-slider>
         </div>
       </div>
-      <div class="percentData can-data">{{formatNum(dataItem.can.siAccelerationPedal,2)}}%</div>
+      <div v-if="!isNaN(accelerationPedal)" class="percentData can-data">{{accelerationPedal}}%</div>
+      <div v-else class="percentData can-data">{{accelerationPedal}}%</div>
       <div class="percentData can-data">油门</div>
     </div>
     <div class="can-data-block">
       <div class="can-data-imgPanel">
         <img class="can-data-img" src='static/speed.png'/>
         <div class="can-slider">
-          <el-slider :value="dataItem|getSpeed" vertical height="65px" :disabled="true" :show-tooltip="false">
+          <el-slider :value="vehicleSpeed" vertical height="65px" :disabled="true" :show-tooltip="false">
           </el-slider>
         </div>
       </div>
-      <div class="can-data">{{formatNum(dataItem.can.siVehicleSpeed,1)}}km/h</div>
+      <div v-if="!isNaN(vehicleSpeed)" class="can-data">{{vehicleSpeed}}km/h</div>
+      <div v-else class="can-data">无数据</div>
       <div class="can-data">车速</div>
     </div>
   </div>
@@ -66,11 +70,47 @@
       }
     },
     computed: {
-      getSteerStyle: function () {
-        let steerStyle = {
-          'transform': 'rotate(' + this.dataItem.can.siSteeringAngle + 'deg)'
+      getSteerStyle() {
+        if(this.dataItem && this.dataItem.can && this.dataItem.can.siSteeringAngle!=null){
+          return {
+            'transform': 'rotate(' + this.dataItem.can.siSteeringAngle + 'deg)'
+          }
         }
-        return steerStyle
+        else{
+          return {}
+        }
+      },
+      steerStyle(){
+        if(this.dataItem && this.dataItem.can && this.dataItem.can.siSteeringAngle!=null){
+          return this.formatNum(parseFloat(this.dataItem.can.siSteeringAngle),2)
+        }
+        else{
+          return NaN
+        }
+      },
+      brakePressure(){
+        if(this.dataItem && this.dataItem.can && this.dataItem.can.siBrakePressure!=null){
+          return this.formatNum(parseFloat(this.dataItem.can.siBrakePressure / 180 * 100),2)
+        }
+        else{
+          return NaN
+        }
+      },
+      accelerationPedal(){
+        if(this.dataItem && this.dataItem.can && this.dataItem.can.siAccelerationPedal!=null){
+          return this.formatNum(parseFloat(this.dataItem.can.siAccelerationPedal),2)
+        }
+        else{
+          return NaN
+        }
+      },
+      vehicleSpeed(){
+        if(this.dataItem && this.dataItem.can && this.dataItem.can.siVehicleSpeed!=null){
+          return this.formatNum(parseFloat(this.dataItem.can.siVehicleSpeed / 240 * 100),1)
+        }
+        else{
+          return NaN
+        }
       }
     },
     methods: {
@@ -93,7 +133,7 @@
         while (s_x.length <= pos_decimal + i) {
           s_x += '0'
         }
-        return s_x
+        return parseFloat(s_x)
       },
     },
     filters: {
@@ -104,9 +144,16 @@
         return parseFloat(item.can.siAccelerationPedal)
       },
       getSpeed: function (item) {
-        return parseFloat(item.can.siVehicleSpeed / 200 * 100)
+        return parseFloat(item.can.siVehicleSpeed / 240 * 100)
       },
     },
+    watch:{
+      dataItem (cur, old) {
+        if(!cur){
+
+        }
+      }
+    }
   }
 
 </script>
